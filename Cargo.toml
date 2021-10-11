@@ -1,0 +1,11 @@
+[package]
+name = "rp-binary-info"
+authors = ["Jonathan Pallant <jonathan.pallant@42technology.com>"]
+version = "0.1.0"
+edition = "2018"
+license = "MIT OR Apache-2.0"
+description = "Types and Functions for adding picotool compatible Binary Info to your application"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
