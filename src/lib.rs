@@ -124,13 +124,105 @@ pub const fn program_name(name: &'static str) -> entry::IdAndString {
 ///
 /// The given string must be null-terminated, so put a `\0` at the end of
 /// it.
-pub const fn version(name: &'static str) -> entry::IdAndString {
+pub const fn program_version_string(name: &'static str) -> entry::IdAndString {
     entry::IdAndString {
         header: entry::Common {
             data_type: DataType::IdAndString,
             tag: TAG_RASPBERRY_PI,
         },
         id: ID_RP_PROGRAM_VERSION_STRING,
+        value: name.as_ptr() as *const u8,
+    }
+}
+
+/// Create a 'Binary Info' entry containing some URL related to the program.
+///
+/// The given string must be null-terminated, so put a `\0` at the end of
+/// it.
+pub const fn program_url(name: &'static str) -> entry::IdAndString {
+    entry::IdAndString {
+        header: entry::Common {
+            data_type: DataType::IdAndString,
+            tag: TAG_RASPBERRY_PI,
+        },
+        id: ID_RP_PROGRAM_URL,
+        value: name.as_ptr() as *const u8,
+    }
+}
+
+/// Create a 'Binary Info' entry containing date/time of the build (as a string).
+///
+/// The given string must be null-terminated, so put a `\0` at the end of
+/// it.
+pub const fn program_build_date_string(name: &'static str) -> entry::IdAndString {
+    entry::IdAndString {
+        header: entry::Common {
+            data_type: DataType::IdAndString,
+            tag: TAG_RASPBERRY_PI,
+        },
+        id: ID_RP_PROGRAM_BUILD_DATE_STRING,
+        value: name.as_ptr() as *const u8,
+    }
+}
+
+/// Create a 'Binary Info' entry containing some program feature.
+///
+/// You can have several of these in your program.
+///
+/// The given string must be null-terminated, so put a `\0` at the end of it.
+pub const fn program_feature(name: &'static str) -> entry::IdAndString {
+    entry::IdAndString {
+        header: entry::Common {
+            data_type: DataType::IdAndString,
+            tag: TAG_RASPBERRY_PI,
+        },
+        id: ID_RP_PROGRAM_FEATURE,
+        value: name.as_ptr() as *const u8,
+    }
+}
+
+/// Create a 'Binary Info' entry containing a build attribute.
+///
+/// You can have several of these in your program.
+///
+/// The given string must be null-terminated, so put a `\0` at the end of it.
+pub const fn program_build_attribute(name: &'static str) -> entry::IdAndString {
+    entry::IdAndString {
+        header: entry::Common {
+            data_type: DataType::IdAndString,
+            tag: TAG_RASPBERRY_PI,
+        },
+        id: ID_RP_PROGRAM_BUILD_ATTRIBUTE,
+        value: name.as_ptr() as *const u8,
+    }
+}
+
+/// Create a 'Binary Info' entry containing the name of the specific BOOT2
+/// bootloader used.
+///
+/// The given string must be null-terminated, so put a `\0` at the end of it.
+pub const fn boot2_name(name: &'static str) -> entry::IdAndString {
+    entry::IdAndString {
+        header: entry::Common {
+            data_type: DataType::IdAndString,
+            tag: TAG_RASPBERRY_PI,
+        },
+        id: ID_RP_BOOT2_NAME,
+        value: name.as_ptr() as *const u8,
+    }
+}
+
+/// Create a 'Binary Info' entry containing the supported Board (e.g. Raspberry Pi Pico).
+///
+/// The given string must be null-terminated, so put a `\0` at the end of
+/// it.
+pub const fn pico_board(name: &'static str) -> entry::IdAndString {
+    entry::IdAndString {
+        header: entry::Common {
+            data_type: DataType::IdAndString,
+            tag: TAG_RASPBERRY_PI,
+        },
+        id: ID_RP_PICO_BOARD,
         value: name.as_ptr() as *const u8,
     }
 }

@@ -129,6 +129,8 @@ with zeroes for all the addresses.
 
 ## What do I need to do?
 
+> See the [example](./example) folder for some fully fledged example crates.
+
 You will need to add two extra pieces to your `memory.x` file (as used by
 [cortex-m-rt](https://github.com/rust-embedded/cortex-m-rt)).
 
