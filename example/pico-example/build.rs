@@ -32,7 +32,7 @@ fn main() {
 
 
     let sha = run_command(Command::new("git").args(&["rev-parse", "--short", "HEAD"]));
-	let version = run_command(Command::new("git").args(&["describe", "--dirty"]));
+	let version = run_command(Command::new("git").args(&["describe", "--dirty", "--all"]));
 
 	println!("cargo:rustc-env=BUILD_GIT_HASH={}", sha);
 	println!("cargo:rustc-env=BUILD_GIT_VERSION={}", version);

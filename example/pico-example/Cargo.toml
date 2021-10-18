@@ -5,6 +5,7 @@ readme = "README.md"
 name = "bi-pico-example"
 version = "0.1.0"
 resolver = "2"
+description = "An example showing how to use rp-binary-info in a real program."
 
 [dependencies]
 cortex-m = "0.7.3"

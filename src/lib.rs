@@ -135,6 +135,21 @@ pub const fn program_version_string(name: &'static str) -> entry::IdAndString {
     }
 }
 
+/// Create a 'Binary Info' entry containing a description of the program.
+///
+/// The given string must be null-terminated, so put a `\0` at the end of
+/// it.
+pub const fn program_description(name: &'static str) -> entry::IdAndString {
+    entry::IdAndString {
+        header: entry::Common {
+            data_type: DataType::IdAndString,
+            tag: TAG_RASPBERRY_PI,
+        },
+        id: ID_RP_PROGRAM_DESCRIPTION,
+        value: name.as_ptr() as *const u8,
+    }
+}
+
 /// Create a 'Binary Info' entry containing some URL related to the program.
 ///
 /// The given string must be null-terminated, so put a `\0` at the end of
@@ -263,5 +278,31 @@ unsafe impl Sync for MappingTableEntry {}
 // pointers between threads. We only allow these to be created with static
 // data, so this is OK.
 unsafe impl Sync for entry::Addr {}
+
+// Next up are the macros. These will effectively paste code into your project,
+// to create both the appropriate global variable containing the value itself,
+// plus a second global variable containing a pointer to it.
+
+#[macro_export]
+macro_rules! program_name_from_cargo {
+    () => {
+        #[link_section = ".bi_entries"]
+        #[used]
+        static PROGRAM_NAME_ADDR: bi::entry::Addr = PROGRAM_NAME.addr();
+        static PROGRAM_NAME: bi::entry::IdAndString = bi::program_name(concat!(env!("CARGO_PKG_NAME"), "\0"));
+    }
+}
+
+#[macro_export]
+macro_rules! program_feature {
+    ($label:ident, $feature:expr) => {
+        mod $label {
+            #[link_section = ".bi_entries"]
+            #[used]
+            static ADDR: bi::entry::Addr = VALUE.addr();
+            static VALUE: bi::entry::IdAndString = $crate::program_name(concat!($feature, "\0"));
+        }
+    }
+}
 
 // End of file

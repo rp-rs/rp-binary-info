@@ -13,6 +13,8 @@ use panic_probe as _;
 use rp2040_hal as hal;
 use rp_binary_info as bi;
 
+use bi::{program_name_from_cargo, program_feature};
+
 use hal::{
     clocks::{init_clocks_and_plls, Clock},
     pac,
@@ -57,42 +59,41 @@ static MAPPING_TABLE: [bi::MappingTableEntry; 2] = [
 /// This is a list of references to our table entries
 #[link_section = ".bi_entries"]
 #[used]
-pub static PICOTOOL_ENTRIES: [bi::entry::Addr; 6] = [
-    PROGRAM_NAME.addr(),
-    PROGRAM_VERSION_STRING.addr(),
-    PROGRAM_URL.addr(),
-    PROGRAM_BUILD_ATTRIBUTE.addr(),
-    PICO_BOARD.addr(),
-    BOOT2_NAME.addr(),
-];
+pub static PROGRAM_VERSION_STRING_ADDR: bi::entry::Addr = PROGRAM_VERSION_STRING.addr();
 
-// PROGRAM_NAME (program_name = value)
-// PROGRAM_VERSION_STRING (program_version = value)
-// PROGRAM_BUILD_DATE_STRING (program_build_date = value)
-// PROGRAM_URL (program_url = value)
-// PROGRAM_DESCRIPTION (program_description = value)
-// PROGRAM_FEATURE (program_features.push_back(value))
-// PROGRAM_BUILD_ATTRIBUTE (build_attributes.push_back(value))
-// PICO_BOARD (pico_board = value)
-// SDK_VERSION (sdk_version = value)
-// BOOT2_NAME (boot2_name = value)
+program_feature!(feature_x, concat!("Git hash ", env!("BUILD_GIT_HASH")));
+program_feature!(feature_y, concat!("Git version ", env!("BUILD_GIT_VERSION")));
 
-/// This is the name of our program
-static PROGRAM_NAME: bi::entry::IdAndString = bi::program_name(concat!(env!("CARGO_PKG_NAME"), "\0"));
+#[link_section = ".bi_entries"]
+#[used]
+pub static PROGRAM_DESCRIPTION_ADDR: bi::entry::Addr = PROGRAM_DESCRIPTION.addr();
+
+#[link_section = ".bi_entries"]
+#[used]
+pub static PROGRAM_URL_ADDR: bi::entry::Addr = PROGRAM_URL.addr();
+
+#[link_section = ".bi_entries"]
+#[used]
+pub static PROGRAM_BUILD_ATTRIBUTE_ADDR: bi::entry::Addr = PROGRAM_BUILD_ATTRIBUTE.addr();
+
+#[link_section = ".bi_entries"]
+#[used]
+pub static PICO_BOARD_ADDR: bi::entry::Addr = PICO_BOARD.addr();
+
+#[link_section = ".bi_entries"]
+#[used]
+pub static BOOT2_NAME_ADDR: bi::entry::Addr = BOOT2_NAME.addr();
+
+program_name_from_cargo!();
 
 /// This is somewhere you can get more info about this program
 static PROGRAM_URL: bi::entry::IdAndString = bi::program_url(concat!(env!("CARGO_PKG_HOMEPAGE"), "\0"));
  
 /// This is the version of our program
-static PROGRAM_VERSION_STRING: bi::entry::IdAndString = bi::program_version_string(
-    concat!(env!("CARGO_PKG_VERSION"), " (", env!("BUILD_GIT_VERSION"), ")\0")
-    );
-
-// PROGRAM_URL
-
-// PROGRAM_DESCRIPTION
-
-// PROGRAM_FEATURE
+static PROGRAM_VERSION_STRING: bi::entry::IdAndString = bi::program_version_string(concat!(env!("CARGO_PKG_VERSION"), "\0"));
+        
+/// Our program description
+static PROGRAM_DESCRIPTION: bi::entry::IdAndString = bi::program_description(concat!(env!("CARGO_PKG_DESCRIPTION"), "\0"));
 
 /// This is Debug or Release
 static PROGRAM_BUILD_ATTRIBUTE: bi::entry::IdAndString = bi::program_build_attribute(concat!(env!("BUILD_PROFILE"), "\0"));
@@ -145,3 +146,5 @@ fn main() -> ! {
         delay.delay_ms(500);
     }
 }
+
+// End of file
