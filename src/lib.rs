@@ -135,6 +135,21 @@ pub const fn version(name: &'static str) -> entry::IdAndString {
     }
 }
 
+/// Create a 'Build Info' entry containing the build date
+///
+/// The given string must be null-terminated, so put a `\0` at the end of
+/// it.
+pub const fn build_date(name: &'static str) -> entry::IdAndString {
+    entry::IdAndString {
+        header: entry::Common {
+            data_type: DataType::IdAndString,
+            tag: TAG_RASPBERRY_PI,
+        },
+        id: ID_RP_PROGRAM_BUILD_DATE_STRING,
+        value: name.as_ptr() as *const u8,
+    }
+}
+
 /// Create a 'Binary Info' entry containing a custom integer entry.
 pub const fn custom_integer(tag: u16, id: u32, value: u32) -> entry::IdAndInt {
     entry::IdAndInt {
@@ -144,6 +159,18 @@ pub const fn custom_integer(tag: u16, id: u32, value: u32) -> entry::IdAndInt {
         },
         id,
         value,
+    }
+}
+
+/// Create a 'Binary Info' entry containing a custom string entry.
+pub const fn custom_string(tag: u16, id: u32, value: &'static str) -> entry::IdAndString {
+    entry::IdAndString {
+        header: entry::Common {
+            data_type: DataType::IdAndString,
+            tag,
+        },
+        id,
+        value: value.as_ptr() as *const u8,
     }
 }
 
