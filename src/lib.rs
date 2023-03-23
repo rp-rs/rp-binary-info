@@ -163,6 +163,9 @@ pub const fn custom_integer(tag: u16, id: u32, value: u32) -> entry::IdAndInt {
 }
 
 /// Create a 'Binary Info' entry containing a custom string entry.
+///
+/// The given string must be null-terminated, so put a `\0` at the end of
+/// it.
 pub const fn custom_string(tag: u16, id: u32, value: &'static str) -> entry::IdAndString {
     entry::IdAndString {
         header: entry::Common {
